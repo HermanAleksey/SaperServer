@@ -1,10 +1,10 @@
-package com.bsuir.herman.demo.model.domain;
+package com.bsuir.herman.demo.model.entity;
 
 import javax.persistence.*;
 
 @Entity
 @Table
-public class User {
+public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

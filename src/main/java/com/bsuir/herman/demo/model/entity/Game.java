@@ -1,4 +1,4 @@
-package com.bsuir.herman.demo.model.domain;
+package com.bsuir.herman.demo.model.entity;
 
 public class Game {
     private int width;
