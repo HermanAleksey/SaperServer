@@ -1,0 +1,46 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.12.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
+}
+
+group = 'com.bsuir.herman'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+
+    // Spring
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa' 
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Liquibase
+    implementation 'org.liquibase:liquibase-core'
+
+    //MySQL connector
+    implementation 'mysql:mysql-connector-java:8.0.15'
+
+    //   JSON Web Token lib
+    implementation 'io.jsonwebtoken:jjwt:0.8.0'
+
+    //    Lombok
+    implementation 'org.projectlombok:lombok'
+
+    //    Tests
+    implementation 'org.springframework.boot:spring-boot-starter-test'
+//    implementation 'org.springframework.boot:spring-security-test'
+
+    implementation 'org.springframework.boot:spring-boot-devtools'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+    useJUnitPlatform()
+}
