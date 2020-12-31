@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(User user) {
+    public void register(User user) {
         Role roleUser = roleRepository.findByName("ROLE_USER");
         List<Role> userRoles = new ArrayList<>();
         userRoles.add(roleUser);
@@ -42,8 +42,6 @@ public class UserServiceImpl implements UserService {
         User registeredUser = userRepository.save(user);
 
         System.out.println("IN register - user: {"+registeredUser+"} successfully registered");
-
-        return registeredUser;
     }
 
     @Override
