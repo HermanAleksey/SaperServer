@@ -5,6 +5,7 @@ import com.bsuir.herman.auth.dto.RegistrationRequestDto;
 import com.bsuir.herman.auth.model.User;
 import com.bsuir.herman.auth.security.jwt.JwtTokenProvider;
 import com.bsuir.herman.auth.service.UserService;
+import com.bsuir.herman.auth.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,20 +41,17 @@ public class AuthenticationRestControllerV1 {
 
     @PostMapping("login")
     public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto) {
-        return authenticate(requestDto.getUsername(),requestDto.getPassword());
+        return authenticate(requestDto.getUsername(), requestDto.getPassword());
     }
 
     @PostMapping("registration")
     public ResponseEntity create(@RequestBody RegistrationRequestDto requestDto) {
         try {
             //registration
-            System.out.println("In create user method");
-            User userForm = requestDto.toUser(); //запарсить обьект в нужный тип
-            userService.register(userForm);//зарегистрировать пользователя
+            register(requestDto);
 
             //authorization
             return authenticate(requestDto.getUsername(), requestDto.getPassword());
-
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username or password");
         }
@@ -78,5 +76,32 @@ public class AuthenticationRestControllerV1 {
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username or password");
         }
+    }
+
+    private boolean register(RegistrationRequestDto registrationDto) {
+        //Проверка сущности на соответстввие
+        User userForm = registrationDto.toUser();
+
+        String userEmail = userForm.getEmail();
+        String userPassword = userForm.getPassword();
+        String userUsername = userForm.getUsername();
+
+        //Проверка на корректность вводимых значений
+        Validator validator = new Validator();
+        if (!validator.matchEmail(userEmail)) return false;
+        if (!validator.matchPassword(userPassword)) return false;
+        if (!validator.matchNickname(userUsername)) return false;
+
+        try {
+            //Проверка, не существует ли уже данный пользователь
+            if (userService.findByUsername(userUsername) == null) return false;
+            if (userService.findByEmail(userEmail) == null) return false;
+            //добавление нового пользователя
+            userService.register(userForm);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return true;
     }
 }
