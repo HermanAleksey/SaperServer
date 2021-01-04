@@ -29,6 +29,17 @@ public class RegistrationRequestDto {
         return username;
     }
 
+    @Override
+    public String toString() {
+        return "RegistrationRequestDto{" +
+                "username='" + username + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }

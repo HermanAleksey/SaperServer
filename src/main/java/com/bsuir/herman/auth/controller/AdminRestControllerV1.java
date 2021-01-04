@@ -1,4 +1,4 @@
-package com.bsuir.herman.auth.rest;
+package com.bsuir.herman.auth.controller;
 
 
 import com.bsuir.herman.auth.dto.AdminUserDto;

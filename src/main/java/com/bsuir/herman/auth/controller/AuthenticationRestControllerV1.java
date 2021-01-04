@@ -1,4 +1,4 @@
-package com.bsuir.herman.auth.rest;
+package com.bsuir.herman.auth.controller;
 
 import com.bsuir.herman.auth.dto.AuthenticationRequestDto;
 import com.bsuir.herman.auth.dto.RegistrationRequestDto;
@@ -47,8 +47,14 @@ public class AuthenticationRestControllerV1 {
     @PostMapping("registration")
     public ResponseEntity create(@RequestBody RegistrationRequestDto requestDto) {
         try {
+            System.out.println(requestDto.toString());
             //registration
-            register(requestDto);
+            if (!register(requestDto)){
+                Map<Object, Object> response = new HashMap<>();
+                response.put("status", "Error.");
+                response.put("description", "Email or nickname was already used.");
+                return ResponseEntity.ok(response);
+            }
 
             //authorization
             return authenticate(requestDto.getUsername(), requestDto.getPassword());
@@ -69,6 +75,7 @@ public class AuthenticationRestControllerV1 {
             String token = jwtTokenProvider.createToken(username, user.getRoles());
 
             Map<Object, Object> response = new HashMap<>();
+            response.put("status", "Success.");
             response.put("username", username);
             response.put("token", token);
 
@@ -88,14 +95,23 @@ public class AuthenticationRestControllerV1 {
 
         //Проверка на корректность вводимых значений
         Validator validator = new Validator();
-        if (!validator.matchEmail(userEmail)) return false;
-        if (!validator.matchPassword(userPassword)) return false;
-        if (!validator.matchNickname(userUsername)) return false;
+        if (!validator.matchEmail(userEmail)) {
+            System.out.println("Email " + userEmail + " doesn't suit");
+            return false;
+        }
+        if (!validator.matchPassword(userPassword)) {
+            System.out.println("Password "+userPassword+" doesn't suit");
+            return false;
+        }
+        if (!validator.matchNickname(userUsername)) {
+            System.out.println("Nickname "+userUsername+" doesn't suit");
+            return false;
+        }
 
         try {
             //Проверка, не существует ли уже данный пользователь
-            if (userService.findByUsername(userUsername) == null) return false;
-            if (userService.findByEmail(userEmail) == null) return false;
+            if (userService.findByUsername(userUsername) != null) return false;
+            if (userService.findByEmail(userEmail) != null) return false;
             //добавление нового пользователя
             userService.register(userForm);
         } catch (Exception e) {
