@@ -1,5 +1,6 @@
 package com.bsuir.herman.auth.controller;
 
+import com.bsuir.herman.auth.Debug;
 import com.bsuir.herman.auth.dto.AuthenticationRequestDto;
 import com.bsuir.herman.auth.dto.RegistrationRequestDto;
 import com.bsuir.herman.auth.model.User;
@@ -41,17 +42,20 @@ public class AuthenticationRestControllerV1 {
 
     @PostMapping("login")
     public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto) {
+        Debug.printMapping("/api/v1/auth/login");
         return authenticate(requestDto.getUsername(), requestDto.getPassword());
     }
 
     @PostMapping("registration")
     public ResponseEntity create(@RequestBody RegistrationRequestDto requestDto) {
+        Debug.printMapping("/api/v1/auth/registration");
         try {
-            System.out.println(requestDto.toString());
             //registration
             if (!register(requestDto)){
                 Map<Object, Object> response = new HashMap<>();
                 response.put("status", "Error.");
+                response.put("username", "");
+                response.put("token", "");
                 response.put("description", "Email or nickname was already used.");
                 return ResponseEntity.ok(response);
             }
@@ -69,7 +73,13 @@ public class AuthenticationRestControllerV1 {
             User user = userService.findByUsername(username);
 
             if (user == null) {
-                throw new UsernameNotFoundException("User with username: " + username + " not found");
+                Map<Object, Object> response = new HashMap<>();
+                response.put("status", "Error.");
+                response.put("username", "");
+                response.put("token", "");
+                response.put("description", "User with username: \" + username + \" not found");
+
+                return ResponseEntity.ok(response);
             }
 
             String token = jwtTokenProvider.createToken(username, user.getRoles());
@@ -78,10 +88,17 @@ public class AuthenticationRestControllerV1 {
             response.put("status", "Success.");
             response.put("username", username);
             response.put("token", token);
+            response.put("description", "");
 
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid username or password");
+            Map<Object, Object> response = new HashMap<>();
+            response.put("status", "Error.");
+            response.put("username", "");
+            response.put("token", "");
+            response.put("description", "Invalid username or password");
+
+            return ResponseEntity.ok(response);
         }
     }
 
