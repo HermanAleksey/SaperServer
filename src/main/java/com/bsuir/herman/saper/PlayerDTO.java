@@ -1,27 +1,26 @@
-package com.bsuir.herman.saper.entity;
+package com.bsuir.herman.saper;
 
-import javax.persistence.*;
+import com.bsuir.herman.saper.entity.Player;
 
-@Entity
-@Table
-public class Player {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class PlayerDTO {
     private Long id;
     private String username;
-    private String login;
-    private String password;
     private int winsScore;
     private int losesScore;
 
-    public Player() {
+    public PlayerDTO() {
     }
 
-    public Player(Long id, String username, String login, String password, int winsScore, int losesScore) {
+    public PlayerDTO(Player player) {
+        this.id = player.getId();
+        this.losesScore = player.getLosesScore();
+        this.username = player.getUsername();
+        this.winsScore = player.getWinsScore();
+    }
+
+    public PlayerDTO(Long id, String username, int winsScore, int losesScore) {
         this.id = id;
         this.username = username;
-        this.login = login;
-        this.password = password;
         this.winsScore = winsScore;
         this.losesScore = losesScore;
     }
@@ -30,28 +29,16 @@ public class Player {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public int getWinsScore() {

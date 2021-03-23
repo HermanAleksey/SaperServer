@@ -35,6 +35,16 @@ public class User extends BaseEntity implements UserDetails {
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private List<Role> roles;
 
+    public User() {
+    }
+
+    public User(String username, String firstName, String lastName, String email, String password) {
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+    }
 
     public String getUsername() {
         return username;
@@ -113,11 +123,11 @@ public class User extends BaseEntity implements UserDetails {
     public String toString() {
         return "User{" +
                 "username='" + username + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", roles=" + roles +
+//                ", firstName='" + firstName + '\'' +
+//                ", lastName='" + lastName + '\'' +
+//                ", email='" + email + '\'' +
+//                ", password='" + password + '\'' +
+//                ", roles=" + roles +
                 '}';
     }
 }

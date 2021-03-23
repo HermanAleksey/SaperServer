@@ -2,12 +2,14 @@ package com.bsuir.herman.auth.controller;
 
 import com.bsuir.herman.auth.Debug;
 import com.bsuir.herman.auth.dto.AuthenticationRequestDto;
+import com.bsuir.herman.auth.dto.LoginResponseDto;
 import com.bsuir.herman.auth.dto.RegistrationRequestDto;
 import com.bsuir.herman.auth.model.User;
 import com.bsuir.herman.auth.security.jwt.JwtTokenProvider;
 import com.bsuir.herman.auth.service.UserService;
 import com.bsuir.herman.auth.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -41,23 +43,26 @@ public class AuthenticationRestControllerV1 {
     }
 
     @PostMapping("login")
-    public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto) {
+    public ResponseEntity<LoginResponseDto> login(@RequestBody AuthenticationRequestDto requestDto) {
         Debug.printMapping("/api/v1/auth/login");
         return authenticate(requestDto.getUsername(), requestDto.getPassword());
     }
 
     @PostMapping("registration")
-    public ResponseEntity create(@RequestBody RegistrationRequestDto requestDto) {
+    public ResponseEntity<LoginResponseDto> create(@RequestBody RegistrationRequestDto requestDto) {
         Debug.printMapping("/api/v1/auth/registration");
         try {
             //registration
-            if (!register(requestDto)){
-                Map<Object, Object> response = new HashMap<>();
-                response.put("status", "Error.");
-                response.put("username", "");
-                response.put("token", "");
-                response.put("description", "Email or nickname was already used.");
-                return ResponseEntity.ok(response);
+            if (!register(requestDto)) {
+                LoginResponseDto responseDto = new LoginResponseDto(
+                        "Error.", -1L, "", "", "Invalid value.");
+//                Map<Object, Object> response = new HashMap<>();
+//                response.put("status", "Error.");
+//                response.put("userId", -1);
+//                response.put("username", "");
+//                response.put("token", "");
+//                response.put("description", "Invalid value.");
+                return ResponseEntity.ok(responseDto);
             }
 
             //authorization
@@ -67,38 +72,48 @@ public class AuthenticationRestControllerV1 {
         }
     }
 
-    private ResponseEntity authenticate(String username, String password) {
+    private ResponseEntity<LoginResponseDto> authenticate(String username, String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
             User user = userService.findByUsername(username);
 
             if (user == null) {
-                Map<Object, Object> response = new HashMap<>();
-                response.put("status", "Error.");
-                response.put("username", "");
-                response.put("token", "");
-                response.put("description", "User with username: \" + username + \" not found");
+                LoginResponseDto responseDto = new LoginResponseDto(
+                        "Error.", -1L, "", "", "User with username: " + username + " not found.");
+//                Map<Object, Object> response = new HashMap<>();
+//                response.put("status", "Error.");
+//                response.put("userId", -1);
+//                response.put("username", "");
+//                response.put("token", "");
+//                response.put("description", "User with username: \" + username + \" not found");
 
-                return ResponseEntity.ok(response);
+                return ResponseEntity.ok(responseDto);
             }
 
             String token = jwtTokenProvider.createToken(username, user.getRoles());
 
-            Map<Object, Object> response = new HashMap<>();
-            response.put("status", "Success.");
-            response.put("username", username);
-            response.put("token", token);
-            response.put("description", "");
+            LoginResponseDto responseDto = new LoginResponseDto(
+                    "Success.", user.getId(), username, token, "");
 
-            return ResponseEntity.ok(response);
+//            Map<Object, Object> response = new HashMap<>();
+//            response.put("status", "Success.");
+//            response.put("userId", user.getId());
+//            response.put("username", username);
+//            response.put("token", token);
+//            response.put("description", "");
+
+            return ResponseEntity.ok(responseDto);
         } catch (AuthenticationException e) {
-            Map<Object, Object> response = new HashMap<>();
-            response.put("status", "Error.");
-            response.put("username", "");
-            response.put("token", "");
-            response.put("description", "Invalid username or password");
+            LoginResponseDto responseDto = new LoginResponseDto(
+                    "Error.", -1L, "", "", "Invalid username or password.");
+//            Map<Object, Object> response = new HashMap<>();
+//            response.put("status", "Error.");
+//            response.put("userId", -1);
+//            response.put("username", "");
+//            response.put("token", "");
+//            response.put("description", "Invalid username or password");
 
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(responseDto);
         }
     }
 
@@ -117,11 +132,11 @@ public class AuthenticationRestControllerV1 {
             return false;
         }
         if (!validator.matchPassword(userPassword)) {
-            System.out.println("Password "+userPassword+" doesn't suit");
+            System.out.println("Password " + userPassword + " doesn't suit");
             return false;
         }
         if (!validator.matchNickname(userUsername)) {
-            System.out.println("Nickname "+userUsername+" doesn't suit");
+            System.out.println("Nickname " + userUsername + " doesn't suit");
             return false;
         }
 

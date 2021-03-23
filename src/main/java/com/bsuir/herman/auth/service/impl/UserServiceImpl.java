@@ -9,6 +9,7 @@ import com.bsuir.herman.auth.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    UserServiceImpl getInstance(){ return this; }
+
     @Override
     public void register(User user) {
         Role roleUser = roleRepository.findByName("ROLE_USER");
@@ -41,27 +44,27 @@ public class UserServiceImpl implements UserService {
 
         User registeredUser = userRepository.save(user);
 
-        System.out.println("IN register - user: {"+registeredUser+"} successfully registered");
+//        System.out.println("IN register - user: {"+registeredUser+"} successfully registered");
     }
 
     @Override
     public List<User> getAll() {
         List<User> result = userRepository.findAll();
-        System.out.println("IN getAll - {"+result.size()+"} users found");
+//        System.out.println("IN getAll - {"+result.size()+"} users found");
         return result;
     }
 
     @Override
     public User findByUsername(String username) {
         User result = userRepository.findByUsername(username);
-        System.out.println("IN findByUsername - user: {"+result+"} found by username: {"+username+"}");
+//        System.out.println("IN findByUsername - user: {"+result+"} found by username: {"+username+"}");
         return result;
     }
 
     @Override
     public User findByEmail(String email) {
         User result = userRepository.findByEmail(email);
-        System.out.println("IN findByEmail - user: {"+result+"} found by login: {"+email+"}");
+//        System.out.println("IN findByEmail - user: {"+result+"} found by login: {"+email+"}");
         return result;
     }
 
@@ -70,17 +73,17 @@ public class UserServiceImpl implements UserService {
         User result = userRepository.findById(id).orElse(null);
 
         if (result == null) {
-            System.out.println("IN findById - no user found by id: {"+id+"}");
+//            System.out.println("IN findById - no user found by id: {"+id+"}");
             return null;
         }
 
-        System.out.println("IN findById - user: {"+result+"} found by id: {}");
+//        System.out.println("IN findById - user: {"+result+"} found by id: {}");
         return result;
     }
 
     @Override
     public void delete(Long id) {
         userRepository.deleteById(id);
-        System.out.println("IN delete - user with id: {"+id+"} successfully deleted");
+//        System.out.println("IN delete - user with id: {"+id+"} successfully deleted");
     }
 }

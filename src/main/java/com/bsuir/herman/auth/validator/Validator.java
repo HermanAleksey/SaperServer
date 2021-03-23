@@ -19,7 +19,7 @@ public class Validator {
     Минимум 8 символов
      */
     public boolean matchPassword(String str){
-        String regexpPassword = "([a-z]+\\w{7,})|([A-Z]+\\w{7,})";
+        String regexpPassword = "\\w{4,}";//"([a-z]+\\w{7,})|([A-Z]+\\w{7,})";
         return str.matches(regexpPassword);
     }
 
