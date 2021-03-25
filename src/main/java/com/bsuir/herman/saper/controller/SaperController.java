@@ -54,23 +54,8 @@ public class SaperController {
         Debug.printMapping("/api/v1/saper/rooms");
         List<Room> rooms = new GameManager().getAllRooms();
         List<RoomDTO> roomDTOList = new RoomDTO().convertList(rooms);
-
-        Debug.printMapping("\n\nrooms:"+rooms+"\n\n");
-        Debug.printMapping("\n\nroomDTOList:"+roomDTOList+"\n\n");
-
         Debug.printInfo("In this moment exist(s) "+rooms.size());
         return new ResponseEntity<>(roomDTOList, HttpStatus.OK);
-    }
-
-    @GetMapping("room/join")
-    public ResponseEntity joinRoom(@RequestBody PlayerDTO playerDTO) {
-        Debug.printMapping("/api/v1/saper/room/join");
-
-        playerDTO.getId();
-//        List<Room> rooms = new GameManager().joinRoom();
-
-
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

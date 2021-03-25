@@ -21,6 +21,7 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
     private final String JOIN_REQUEST = "JOIN_REQUEST";
     private final String LEFT_ROOM_REQUEST = "LEFT_ROOM_REQUEST";
     private final String SEND_ROOM_MESSAGE = "SEND_ROOM_MESSAGE";
+    private final String DISCONNECT_REQUEST = "DISCONNECT_REQUEST";
 
     static Map<Long, WebPlayer> playersMap = new HashMap<>();
 
@@ -40,12 +41,14 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         Long key = findBySession(session);
-
-        gameManager.removePlayer(playersMap.get(key));
-        playersMap.remove(key);
-//        playersMap.put(key,null);
+        closeConnection(key);
 
         Debug.printWsInfo("Connection " + session + " was closed. Player with id(key) "+key+" was removed.");
+    }
+
+    private void closeConnection(Long key){
+        gameManager.removePlayer(playersMap.get(key));
+        playersMap.remove(key);
     }
 
     private Long findBySession(WebSocketSession session) {
@@ -107,6 +110,14 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
                 Debug.printWsInfo("Player #" + playerId + " on room #" + roomId + " sent msg:" + str);
                 boolean result = gameManager.writeToRoom(roomId, playerId, str);
                 Debug.printWsInfo("Result:"+result);
+                break;
+            }
+            case (DISCONNECT_REQUEST): {
+                Long playerId = Long.parseLong(list[1]);
+
+                Debug.printWsInfo("Player #" + playerId + " close connection");
+                playersMap.get(playerId).getSession().close();
+                Debug.printWsInfo("Result: ?");
                 break;
             }
             default: {
