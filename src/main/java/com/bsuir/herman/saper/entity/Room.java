@@ -9,14 +9,19 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Room {
-    int id;
-    WebPlayer[] playerArray;
-    List<String> gameLog;
+    private int id;
+    private WebPlayer[] playerArray;
+    private List<String> gameLog;
 
     public Room(int id) {
         this.id = id;
         playerArray = new WebPlayer[2];
         gameLog = new ArrayList<>();
+    }
+
+    public WebPlayer getPlayer(int number) {
+        if (playerArray[number] != null) return playerArray[number];
+        return new WebPlayer();
     }
 
     public boolean addPlayer(WebPlayer player) {
@@ -54,7 +59,7 @@ public class Room {
     public boolean writeToChat(int playerId, String msg) {
         addLog(msg);
 
-        Debug.printInfo(""+this);
+        Debug.printInfo("" + this);
 
         try {
             TextMessage message = new TextMessage("From:" + playerId + "\nMessage:" + msg + "\n");

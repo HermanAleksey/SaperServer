@@ -8,6 +8,7 @@ public class WebPlayer {
     User user;
 
     public WebPlayer() {
+        user = new User();
     }
 
     public WebPlayer(WebPlayer webPlayer) {

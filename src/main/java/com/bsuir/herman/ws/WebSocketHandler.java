@@ -2,21 +2,16 @@ package com.bsuir.herman.ws;
 
 import com.bsuir.herman.auth.Debug;
 import com.bsuir.herman.auth.model.User;
-import com.bsuir.herman.auth.repository.UserRepository;
-import com.bsuir.herman.auth.security.jwt.JwtTokenProvider;
 import com.bsuir.herman.auth.service.UserService;
-import com.bsuir.herman.saper.entity.Player;
-import com.bsuir.herman.saper.entity.Room;
 import com.bsuir.herman.saper.entity.WebPlayer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class WebSocketHandler extends AbstractWebSocketHandler {
 
@@ -39,11 +34,27 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+        Debug.printWsInfo("Connection " + session + " was established.");
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        System.out.println("Connection " + session + " was closed.");
+        Long key = findBySession(session);
+
+        gameManager.removePlayer(playersMap.get(key));
+        playersMap.remove(key);
+//        playersMap.put(key,null);
+
+        Debug.printWsInfo("Connection " + session + " was closed. Player with id(key) "+key+" was removed.");
+    }
+
+    private Long findBySession(WebSocketSession session) {
+//        playersMap.containsValue()
+        return playersMap.entrySet()
+                .stream()
+                .filter(entry -> session.equals(entry.getValue().getSession()))
+                .map(Map.Entry::getKey)
+                .findFirst().get();
     }
 
     @Override

@@ -26,14 +26,17 @@ public class RoomDTO {
 
     public RoomDTO(Room room) {
         this.id = room.getId();
-        this.player_1 = new PlayerDTO();
-        this.player_2 = new PlayerDTO();
+        this.player_1 = new PlayerDTO(room.getPlayer(0).getUser());
+        this.player_2 = new PlayerDTO(room.getPlayer(1).getUser());
     }
 
-    public RoomDTO(int id, PlayerDTO player_1, PlayerDTO player_2) {
-        this.id = id;
-        this.player_1 = player_1;
-        this.player_2 = player_2;
+    @Override
+    public String toString() {
+        return "RoomDTO{" +
+                "id=" + id +
+                ", player_1=" + player_1 +
+                ", player_2=" + player_2 +
+                '}';
     }
 
     public int getId() {

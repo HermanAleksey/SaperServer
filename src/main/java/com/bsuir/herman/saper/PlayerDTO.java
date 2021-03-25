@@ -1,6 +1,8 @@
 package com.bsuir.herman.saper;
 
-import com.bsuir.herman.saper.entity.Player;
+//import com.bsuir.herman.saper.entity.Player;
+
+import com.bsuir.herman.auth.model.User;
 
 public class PlayerDTO {
     private Long id;
@@ -11,11 +13,11 @@ public class PlayerDTO {
     public PlayerDTO() {
     }
 
-    public PlayerDTO(Player player) {
+    public PlayerDTO(User player) {
         this.id = player.getId();
-        this.losesScore = player.getLosesScore();
         this.username = player.getUsername();
-        this.winsScore = player.getWinsScore();
+        winsScore = 1;
+        losesScore = 1;
     }
 
     public PlayerDTO(Long id, String username, int winsScore, int losesScore) {
@@ -23,6 +25,16 @@ public class PlayerDTO {
         this.username = username;
         this.winsScore = winsScore;
         this.losesScore = losesScore;
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerDTO{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", winsScore=" + winsScore +
+                ", losesScore=" + losesScore +
+                '}';
     }
 
     public Long getId() {

@@ -56,4 +56,11 @@ public class GameManager {
         }
         return null;
     }
+
+    public void removePlayer(WebPlayer webPlayer) {
+        for (Room r :
+                rooms) {
+            r.removePlayer(webPlayer);
+        }
+    }
 }
