@@ -8,6 +8,9 @@ public class Debug {
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_BLUE = "\u001B[34m";
 
+    public static final String ANSI_STRIKEOUT_PURPLE = "\u001B[35m";
+    public static final String ANSI_STRIKEOUT_CYAN = "\u001B[36m";
+
     public static void printMapping(String mapping) {
         System.out.println("Was called mapping: " + ANSI_YELLOW + mapping + ANSI_RESET);
     }
@@ -21,7 +24,11 @@ public class Debug {
     }
 
     public static void printWsInfo(String msg) {
-        System.out.println("WS info:" + ANSI_GREEN + msg + ANSI_RESET);
+        System.out.println("WS info: " + ANSI_GREEN + msg + ANSI_RESET);
+    }
+
+    public static void printWsResponse(String msg) {
+        System.out.println("WS response: " + ANSI_STRIKEOUT_PURPLE + msg + ANSI_RESET);
     }
 
 }

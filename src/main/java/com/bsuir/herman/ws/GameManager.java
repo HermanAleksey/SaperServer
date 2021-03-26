@@ -49,7 +49,7 @@ public class GameManager {
         return room;
     }
 
-    private Room getRoom(int roomId) {
+    Room getRoom(int roomId) {
         for (Room room : rooms) {
             if (room.getId() == roomId)
                 return room;

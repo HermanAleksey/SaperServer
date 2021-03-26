@@ -2,6 +2,8 @@ package com.bsuir.herman.saper.entity;
 
 import com.bsuir.herman.auth.Debug;
 import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,12 +26,17 @@ public class Room {
         return new WebPlayer();
     }
 
+    public WebSocketSession getSession(int number) {
+        if (playerArray[number] != null && playerArray[number].session != null) {return playerArray[number].session;}
+        return null;
+    }
+
     public boolean addPlayer(WebPlayer player) {
         if (playerArray[0] == null) {
             playerArray[0] = player;
             return true;
         }
-        if (playerArray[1] == null) {
+        if (playerArray[1] == null && playerArray[0]!= player) {
             playerArray[1] = player;
             return true;
         }
@@ -62,7 +69,7 @@ public class Room {
         Debug.printInfo("" + this);
 
         try {
-            TextMessage message = new TextMessage("From:" + playerId + "\nMessage:" + msg + "\n");
+            TextMessage message = new TextMessage("MESSAGE_RESPONSE;From:" + playerId + "\nMessage:" + msg + "\n");
             if (playerArray[0] != null) playerArray[0].session.sendMessage(message);
             if (playerArray[1] != null) playerArray[1].session.sendMessage(message);
             return true;
