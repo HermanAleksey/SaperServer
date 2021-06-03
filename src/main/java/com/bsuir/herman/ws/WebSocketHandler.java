@@ -24,6 +24,7 @@ public class WebSocketHandler extends AbstractWebSocketHandler {
     private final String LEFT_ROOM_REQUEST = "LEFT_ROOM_REQUEST";
     private final String SEND_ROOM_MESSAGE = "SEND_ROOM_MESSAGE";
     private final String DISCONNECT_REQUEST = "DISCONNECT_REQUEST";
+    private final String START_GAME = "START_GAME";
 
     //for responses
     private final String JOIN_RESPONSE = "JOIN_RESPONSE";

@@ -5,7 +5,7 @@ import com.bsuir.herman.auth.Debug;
 import com.bsuir.herman.auth.dto.UserDto;
 import com.bsuir.herman.auth.model.User;
 import com.bsuir.herman.auth.service.UserService;
-import com.bsuir.herman.saper.DTOMessage;
+import com.bsuir.herman.saper.entity.DTO.DTOMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

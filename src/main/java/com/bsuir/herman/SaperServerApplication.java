@@ -10,8 +10,7 @@ public class SaperServerApplication {
     public static void main(String[] args) {
         SpringApplication.run(SaperServerApplication.class, args);
         GameManager gameManager = new GameManager();
-        gameManager.createRoom();
-        gameManager.createRoom();
-        gameManager.createRoom();
+        gameManager.createRoom(null);
+        gameManager.createRoom(null);
     }
 }

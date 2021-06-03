@@ -1,16 +1,11 @@
 package com.bsuir.herman.saper.controller;
 
 import com.bsuir.herman.auth.Debug;
-import com.bsuir.herman.auth.dto.AuthenticationRequestDto;
-import com.bsuir.herman.auth.dto.MessageDto;
-import com.bsuir.herman.auth.dto.RegistrationRequestDto;
-import com.bsuir.herman.auth.model.User;
 import com.bsuir.herman.auth.service.UserService;
-import com.bsuir.herman.saper.PlayerDTO;
-import com.bsuir.herman.saper.RoomDTO;
+import com.bsuir.herman.saper.entity.DTO.RoomDTO;
+import com.bsuir.herman.saper.entity.DTO.GameDto;
 import com.bsuir.herman.saper.entity.Room;
 import com.bsuir.herman.ws.GameManager;
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,10 +38,13 @@ public class SaperController {
         this.userService = userService;
     }
 
-    @GetMapping("room/create")
-    public ResponseEntity<Room> createRoom() {
+    @PostMapping("room/create")
+    public ResponseEntity<Room> createRoom(
+            @RequestBody GameDto gameDto
+            ) {
         Debug.printMapping("/api/v1/saper/room/create");
-        return new ResponseEntity<>(new GameManager().createRoom(), HttpStatus.OK);
+        Debug.printInfo("Created game room: "+ gameDto.toString());
+        return new ResponseEntity<>(new GameManager().createRoom(gameDto), HttpStatus.OK);
     }
 
     @GetMapping("rooms")

@@ -1,6 +1,7 @@
 package com.bsuir.herman.ws;
 
 import com.bsuir.herman.auth.Debug;
+import com.bsuir.herman.saper.entity.DTO.GameDto;
 import com.bsuir.herman.saper.entity.Room;
 import com.bsuir.herman.saper.entity.WebPlayer;
 
@@ -40,8 +41,15 @@ public class GameManager {
         return room.removePlayer(player);
     }
 
-    public Room createRoom() {
-        Room room = new Room(roomCounter);
+    public Room createRoom(GameDto gameDto) {
+        Room room;
+        if (gameDto == null) {
+            room = new Room(roomCounter);
+        } else {
+            room = gameDto.toRoom();
+            room.setId(roomCounter);
+        }
+
         roomCounter++;
         rooms.add(room);
 

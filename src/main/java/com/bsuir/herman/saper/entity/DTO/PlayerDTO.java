@@ -1,4 +1,4 @@
-package com.bsuir.herman.saper;
+package com.bsuir.herman.saper.entity.DTO;
 
 //import com.bsuir.herman.saper.entity.Player;
 
